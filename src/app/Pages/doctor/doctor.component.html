@@ -1,0 +1,12 @@
+<div class="doctor-cards-container">
+  <div *ngFor="let doctor of doctors; let i = index" class="doctor-card" (click)="openDatepicker(i)">
+    <div class="doctor-header">
+      <span class="doctor-icon">🦷</span>
+      <h3 class="doctor-name">{{ doctor.FirstName }} {{ doctor.LastName }}</h3>
+      <p class="doctor-specialization">{{ doctor.Specialization }}</p>
+    </div>
+    <div class="doctor-body">
+      <p class="doctor-email"><strong>Email:</strong> {{ doctor.Email }}</p>
+    </div>
+  </div>
+</div>

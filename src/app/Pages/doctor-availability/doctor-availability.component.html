@@ -1,1 +1,30 @@
-<p>doctor-availability works!</p>
+<div class="doctor-availability-container">
+    <h2>Doktor Müsaitlik Durumu</h2>
+  
+    <div *ngFor="let availability of doctorAvailability" class="availability-card">
+      <div *ngIf="availability.Doctors">
+        <div class="doctor-info">
+          <p><strong>Doktor:</strong> {{ availability.Doctors.FirstName }} {{ availability.Doctors.LastName }}</p>
+          <p><strong>Müsaitlik Durumu:</strong> {{ availability.DayOfWeek }}</p>
+          <p><strong>Saatler:</strong> {{ availability.StartTime  }} - {{ availability.EndTime}}</p>
+        </div>
+    </div>
+  
+    <!-- Kullanıcının seçebileceği randevu tarih ve saat formu -->
+    <div *ngIf="selectedAvailability" class="appointment-form">
+      <h3>Randevu Seçiniz</h3>
+      <form (ngSubmit)="submitAppointment()">
+        <div class="form-group">
+          <label for="date">Tarih:</label>
+          <input type="date" id="date" [(ngModel)]="selectedDate" name="date" required class="form-control">
+        </div>
+  
+        <div class="form-group">
+          <label for="time">Saat:</label>
+          <input type="time" id="time" [(ngModel)]="selectedTime" name="time" required class="form-control">
+        </div>
+  
+        <button type="submit" class="btn btn-success">Randevu Al</button>
+      </form>
+    </div>
+  </div>

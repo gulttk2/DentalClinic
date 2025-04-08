@@ -1,0 +1,39 @@
+
+<div class="calendar-container">
+    <!-- Takvim Başlık -->
+    <div class="calendar-header">
+      <button (click)="changeMonth('prev')" class="btn-month">‹</button>
+      <span class="month-year">{{ currentMonth }} {{ currentYear }}</span>
+      <button (click)="changeMonth('next')" class="btn-month">›</button>
+    </div>
+  
+    <!-- Takvim ve Saatler Yan Yana -->
+    <div class="calendar-content">
+      <!-- Takvim Grid -->
+      <div class="calendar-grid">
+        <div class="calendar-day" *ngFor="let day of days"
+             [ngClass]="{'today': isToday(day), 'selected': day.isSelected}"
+             (click)="selectDay(day)">
+          <span>{{ day.date }}</span>
+        </div>
+      </div>
+  
+      <!-- Saat Dilimleri Sağda, Takvimden Ayrı -->
+      <div *ngIf="selectedDay" class="time-slots-container">
+        <div class="selected-day-info">
+          <p>{{ selectedDay.date | date: 'fullDate' }}'yi seçtiniz.</p>
+        </div>
+  
+        <!-- Saat Dilimleri Listesi -->
+        <div class="time-slots">
+          <div *ngFor="let slot of timeSlots" 
+               class="time-slot" 
+               [ngClass]="{'selected': selectedTimeSlot === slot}" 
+               (click)="selectTime(slot)">
+            {{ slot }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

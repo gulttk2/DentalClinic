@@ -1,0 +1,25 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        
+        <button class="navbar-brand btn btn-link" (click)="redirect('doctorAvailability')">
+            <i class="fa-solid fa-tooth"></i> Dental Clinic
+        </button>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <button class="nav-link btn btn-link" (click)="redirect('')">Hekimlerimiz</button>
+                <button class="nav-link btn btn-link" (click)="redirect('doctorDetail')">Randevu Al</button>
+
+
+            </div>
+        </div>
+
+       
+    </div>
+</nav>
