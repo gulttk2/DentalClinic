@@ -32,7 +32,13 @@ export class PatientFilesService {
 getPatientFile():Observable<PatientFiles[]>{
   return this.http.get<PatientFiles[]>(`${this.apiUrl}/GetAllPatientFile`);
 }
+downloadPatientFile(id: number) {
+  return this.http.get(`${this.apiUrl}/DownloadPatientFile/${id}`, {
+    responseType: 'blob',
+    observe: 'response'
 
+  });
+}
 
 
 

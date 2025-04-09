@@ -12,14 +12,13 @@
       </tr>
     </thead>
     <tbody>
-      
       <tr *ngFor="let patientFile of patientFiles">
         <td>{{ patientFile.Patients.FirstName }} {{ patientFile.Patients.LastName }}</td> 
         <td>{{ patientFile.Patients.Phone }}</td>
         <td>{{ patientFile.FileType.TypeName }}</td>
         <td>{{ patientFile.FileName }}</td>
         <td>
-          <a [href]="patientFile.FilePath" target="_blank" [download]="patientFile.FileName">Görüntüle</a>
+          <button (click)="downloadFile(patientFile.ID)">Dosyayı İndir</button>
         </td>               
         <td>{{ patientFile.UploadTime | date:'short' }}</td>
       </tr>
