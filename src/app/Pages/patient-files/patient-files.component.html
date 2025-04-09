@@ -1,1 +1,28 @@
-<p>patient-files works!</p>
+<div class="patientFiles-container">
+  <h2>Hasta Dosyaları</h2>
+  <table class="patientFiles-table">
+    <thead>
+      <tr>
+        <th>Ad Soyad</th>
+        <th>Telefon</th>
+        <th>Dosya Tipi</th>
+        <th>Dosya Adı</th>
+        <th>Dosya</th>
+        <th>Yüklenme Tarihi</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+      <tr *ngFor="let patientFile of patientFiles">
+        <td>{{ patientFile.Patients.FirstName }} {{ patientFile.Patients.LastName }}</td> 
+        <td>{{ patientFile.Patients.Phone }}</td>
+        <td>{{ patientFile.FileType.TypeName }}</td>
+        <td>{{ patientFile.FileName }}</td>
+        <td>
+          <a [href]="patientFile.FilePath" target="_blank" [download]="patientFile.FileName">Görüntüle</a>
+        </td>               
+        <td>{{ patientFile.UploadTime | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

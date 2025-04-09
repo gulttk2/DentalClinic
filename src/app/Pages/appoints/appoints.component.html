@@ -1,7 +1,26 @@
-<div class="appointments-container">
-    <h2>Randevular</h2>
+<div class="appointment-container">
+  <h2>Randevu Listesi</h2>
 
-      <p>Henüz herhangi bir randevu bulunmamaktadır.</p>
-
-  </div>
-  
+  <table class="appointments-table">
+    <thead>
+      <tr>
+        <th>Randevu Tarihi</th>
+        <th>Doktor</th>
+        <th>Uzmanlık</th>
+        <th>Doktor Telefon</th>
+        <th>Hasta </th>
+        <th>Hasta Numarası</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let appointment of appoints">
+        <td>{{ appointment.AppointmentDate }}</td>
+        <td>{{ appointment.Doctors.FirstName }} {{ appointment.Doctors.LastName}}</td>
+        <td>{{ appointment.Doctors.Specialization }}</td>
+        <td>{{ appointment.Doctors.Phone }}</td>
+        <td>{{ appointment.Patients.FirstName}}{{appointment.Patients.LastName}}</td>
+        <td>{{ appointment.Patients.Phone}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

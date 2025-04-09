@@ -11,7 +11,7 @@ export interface AppointmentService{
   ServiceID:number,
   Appointments: Appointment,
   PatientID:number,
-  Patients:Patient,
+  Patients:Patients,
   Services:Service
 
 }
@@ -21,10 +21,10 @@ AppointmentDate:string,
 DoctorID:number,
 Doctors:Doctor
 PatientID:number,
-Patient:Patient
+Patients:Patients
 }
 
-export interface Patient{
+export interface Patients{
 ID:number,
 FirstName:string,
 LastName:string,

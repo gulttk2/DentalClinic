@@ -1,11 +1,25 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { PatientFiles, PatientFilesService } from '../../Services/patient-files.service';
+import { AppointmentService } from '../../Services/appointment.service';
 
 @Component({
   selector: 'app-patient-files',
-  imports: [],
+  standalone:true,
+  imports: [CommonModule],
   templateUrl: './patient-files.component.html',
-  styleUrl: './patient-files.component.css'
+  styleUrls: ['./patient-files.component.css']
 })
-export class PatientFilesComponent {
+export class PatientFilesComponent implements OnInit {
+
+patientFiles : PatientFiles[] =[];
+constructor(private patientFileService:PatientFilesService) {}
+
+ngOnInit(): void {
+  this.patientFileService.getPatientFile().subscribe({
+    next: (data) => this.patientFiles = data,
+    error: (err) => console.error("Error fetching patient files", err)
+  });
+}
 
 }
