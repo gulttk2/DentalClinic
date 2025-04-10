@@ -2,7 +2,7 @@
     <div class="container">
       <div class="sec-title">
         <div class="title">Kolayca Randevunuzu oluşturun ve Sürecinizi Takip edin</div>
-        <h2>Randevu</h2>
+        <h2>Randevu Bilgileri</h2>
       </div>
       <div class="row clearfix">
   
@@ -43,11 +43,38 @@
                         </select>
                       </div>
                   </div>
-  
+                  
+                  <div class="form-group" > 
+                  <!-- Doktor Seçimi -->
+                  <select [(ngModel)]="selectedDoctorId" name="doctor" (click)="onDoctorChange()" required>
+                    <option value="" disabled selected>Doktor Seçin</option>
+                    <option *ngFor="let doctor of doctors" [value]="doctor.ID">
+                      {{ doctor.FirstName }} {{ doctor.LastName }}
+                    </option>
+                  </select>
+                  </div>
+
+
+                  <div class="form-group">
+                    <select [(ngModel)]="selectedTime" name="isAvailability" required>
+                      <option value="" disabled selected>Müsait Saat seçin</option>
+                      <option *ngFor="let time of availableDates" [value]="time">
+                        {{ time }} <!-- Müsait saatleri burada listeliyoruz -->
+                      </option>
+                    </select>
+                  </div>
+                  
+
+
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                    <button class="theme-btn appointment-btn" type="submit" name="submit-form">Randevu Al</button>
+                    <button class="theme-btn appointment-btn" (click)="createAppointment()" type="submit" name="submit-form">Randevu Al</button>
                   </div>
                 </div>
+
+                
+
+
+
               </form>
             </div>
           </div>
@@ -70,5 +97,6 @@
   
       </div>
     </div>
-  </section>
+
+</section>
   

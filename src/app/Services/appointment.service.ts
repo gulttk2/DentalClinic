@@ -18,6 +18,7 @@ export interface AppointmentService{
 export interface Appointment{
 ID:number,
 AppointmentDate:string,
+IsAvailable:boolean,
 DoctorID:number,
 Doctors:Doctor
 PatientID:number,
@@ -48,27 +49,29 @@ export interface Category{
   providedIn: 'root'
 })
 export class AppointmentService {
-// [x: string]: any;
+  private apiUrl = 'https://localhost:7120/api';
 
+  constructor(private http: HttpClient) { }
 
-private apiUrl ='https://localhost:7120/api';
-constructor(private http:HttpClient) { }
-
-getAppointmentService():Observable<AppointmentService[]>{
-
-  return this.http.get<AppointmentService[]>(`${this.apiUrl}/AppointmentService/GetAllAppointmentService`);
-
-}
-getService():Observable<Services[]>{
-  return this.http.get<Services[]>(`${this.apiUrl}/Services/GetAllService`);
-}
-getCategory():Observable<Category[]>{
-  return this.http.get<Category[]>(`${this.apiUrl}/Category/GetAllCategory`);
-}
-
-  addAppointmentService(appointmentService: AppointmentService): Observable<AppointmentService> {
-    return this.http.post<AppointmentService>(`${this.apiUrl}/AppointmentService`, appointmentService);
+  getService(): Observable<Services[]> {
+    return this.http.get<Services[]>(`${this.apiUrl}/Services/GetAllService`);
   }
- 
-  
+
+  getCategory(): Observable<Category[]> {
+    return this.http.get<Category[]>(`${this.apiUrl}/Category/GetAllCategory`);
+  }
+
+  getDoctorAvailableDates(doctorId: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/AppointmentService/GetDoctorAvailability?doctorId=${doctorId}`);
+  }
+
+  addAppointment(appointment: Appointment): Observable<Appointment> {
+    return this.http.post<Appointment>(`${this.apiUrl}/Appointment/AddAppointments`, appointment);
+  }
+  getAppointments(): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.apiUrl}/Appointment/GetAllAppointments`);
+  }
+  getDoctors(): Observable<Doctor[]> {
+    return this.http.get<Doctor[]>(`${this.apiUrl}/Doctor/GetAllDoctor`);
+  }
 }

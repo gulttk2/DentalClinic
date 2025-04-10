@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AppointmentService } from '../../Services/appointment.service';  // Import the AppointmentService
+import { Appointment, AppointmentService } from '../../Services/appointment.service';  // Import the AppointmentService
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-appointment-service',
@@ -11,23 +12,17 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./appointment-service.component.css']
 })
 export class AppointmentServiceComponent implements OnInit {
-  appointmentServices: AppointmentService[] = []; 
-
+  appointmentServices: Appointment[] = []; 
   constructor(private appointmentService: AppointmentService, private router: Router) { }
 
   ngOnInit(): void {
-   
-    this.appointmentService.getAppointmentService().subscribe(
-      (data: AppointmentService[]) => {
-        this.appointmentServices = data; 
+    this.appointmentService.getAppointments().subscribe(
+      (data: Appointment[]) => {  // Data type should be Appointment[]
+        this.appointmentServices = data;
       },
-      (error) => {
+      (error: HttpErrorResponse) => {  // Import and use HttpErrorResponse for error type
         console.error('Error fetching appointment services:', error);
       }
     );
   }
-
-
 }
-
-
