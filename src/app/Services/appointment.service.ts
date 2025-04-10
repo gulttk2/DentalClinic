@@ -12,7 +12,7 @@ export interface AppointmentService{
   Appointments: Appointment,
   PatientID:number,
   Patients:Patients,
-  Services:Service
+  Services:Services
 
 }
 export interface Appointment{
@@ -32,7 +32,7 @@ Phone:string,
 Email:string
 }
 
-export interface Service{
+export interface Services{
 ID:number,
 Name:string,
 CategoryID:number,
@@ -48,19 +48,27 @@ export interface Category{
   providedIn: 'root'
 })
 export class AppointmentService {
+// [x: string]: any;
 
 
-private apiUrl ='https://localhost:7120/api/AppointmentService';
+private apiUrl ='https://localhost:7120/api';
 constructor(private http:HttpClient) { }
 
 getAppointmentService():Observable<AppointmentService[]>{
 
-  return this.http.get<AppointmentService[]>(`${this.apiUrl}/GetAllAppointmentService`);
+  return this.http.get<AppointmentService[]>(`${this.apiUrl}/AppointmentService/GetAllAppointmentService`);
 
 }
+getService():Observable<Services[]>{
+  return this.http.get<Services[]>(`${this.apiUrl}/Services/GetAllService`);
+}
+getCategory():Observable<Category[]>{
+  return this.http.get<Category[]>(`${this.apiUrl}/Category/GetAllCategory`);
+}
 
-
-
-
-
+  addAppointmentService(appointmentService: AppointmentService): Observable<AppointmentService> {
+    return this.http.post<AppointmentService>(`${this.apiUrl}/AppointmentService`, appointmentService);
+  }
+ 
+  
 }

@@ -46,10 +46,6 @@ export class DoctorAvailabilityComponent implements OnInit {
     });
   }
 
-  // Kullanıcı bir doktorun müsaitlik durumuna tıkladığında bu fonksiyon çalışacak
-  bookAppointment(availability: any): void {
-    this.selectedAvailability = availability;  // Seçilen müsaitlik zamanını belirliyoruz
-  }
 
   // Randevu alındığında çalışacak fonksiyon
   submitAppointment(): void {

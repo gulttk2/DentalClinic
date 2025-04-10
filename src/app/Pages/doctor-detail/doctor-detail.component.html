@@ -1,39 +1,74 @@
-
-<div class="calendar-container">
-    <!-- Takvim Başlık -->
-    <div class="calendar-header">
-      <button (click)="changeMonth('prev')" class="btn-month">‹</button>
-      <span class="month-year">{{ currentMonth }} {{ currentYear }}</span>
-      <button (click)="changeMonth('next')" class="btn-month">›</button>
-    </div>
-  
-    <!-- Takvim ve Saatler Yan Yana -->
-    <div class="calendar-content">
-      <!-- Takvim Grid -->
-      <div class="calendar-grid">
-        <div class="calendar-day" *ngFor="let day of days"
-             [ngClass]="{'today': isToday(day), 'selected': day.isSelected}"
-             (click)="selectDay(day)">
-          <span>{{ day.date }}</span>
-        </div>
+<section class="appointment-section">
+    <div class="container">
+      <div class="sec-title">
+        <div class="title">Kolayca Randevunuzu oluşturun ve Sürecinizi Takip edin</div>
+        <h2>Randevu</h2>
       </div>
+      <div class="row clearfix">
   
-      <!-- Saat Dilimleri Sağda, Takvimden Ayrı -->
-      <div *ngIf="selectedDay" class="time-slots-container">
-        <div class="selected-day-info">
-          <p>{{ selectedDay.date | date: 'fullDate' }}'yi seçtiniz.</p>
-        </div>
+        <!-- Form Kolonu -->
+        <div class="form-column col-md-8 col-sm-12 col-xs-12">
+          <div class="inner-column">
+            <div class="default-form">
+              <form method="post">
+                <div class="row clearfix">
+                  <div class="column col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <input type="text" name="username" placeholder="Adınız" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="usersurname" placeholder="Soyadınız" required>
+                    </div>
+                    
+                    <!-- Kategori seçimi -->
+                    <div class="form-group">
+                      <select class="custom-select-box" [(ngModel)]="selectedCategoryId" name="category" (change)="onCategoryChange()">
+                        <option value="" disabled selected>Kategori Seçin</option>
+                        <option *ngFor="let category of categories" [value]="category.ID">{{ category.CategoryName }}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="column col-md-6 col-sm-6 col-xs-12">
+                    <div class="form-group">
+                      <input type="email" name="email" placeholder="E-posta" required>
+                    </div>
+                    <div class="form-group">
+                      <input type="text" name="phone" placeholder="Telefon" required>
+                    </div>
+                    <!-- Hizmet seçimi -->
+                    <div class="form-group" > 
+                        <select class="custom-select-box" [(ngModel)]="selectedServiceId" name="service">
+                          <option value="" disabled selected>Hizmet Seçin</option>
+                          <option *ngFor="let service of filteredServices" [value]="service.ID">{{ service.Name }}</option>
+                        </select>
+                      </div>
+                  </div>
   
-        <!-- Saat Dilimleri Listesi -->
-        <div class="time-slots">
-          <div *ngFor="let slot of timeSlots" 
-               class="time-slot" 
-               [ngClass]="{'selected': selectedTimeSlot === slot}" 
-               (click)="selectTime(slot)">
-            {{ slot }}
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                    <button class="theme-btn appointment-btn" type="submit" name="submit-form">Randevu Al</button>
+                  </div>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
+  
+        <!-- Çalışma Saatleri -->
+        <div class="schedule-column col-md-4 col-sm-12 col-xs-12">
+          <div class="inner-outer">
+            <div class="inner-column">
+              <h2>Çalışma Saatleri:</h2>
+              <ul class="time-list">
+                <li>Pazartesi - Cuma 09:00 - 17:00</li>
+                <li>Cumartesi 09:00 - 15:00</li>
+                <li><strong>Pazar Kapalı</strong></li>
+                <li class="closed">Tüm resmi tatiller kapalıdır.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+  
       </div>
     </div>
-  </div>
+  </section>
   

@@ -1,155 +1,22 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
 
-body {
-    background-color: #f4f4f9;  /* Arka plan rengini açık griye çeviriyoruz */
-    color: #333;  /* Yazı rengini daha koyu gri yapıyoruz */
-    font-family: 'Arial', sans-serif;
-    display: flex;
-    justify-content: center;  /* Yatayda ortalama */
-    align-items: center;      /* Dikeyde ortalama */
-    height: 100vh;            /* Sayfa yüksekliği tamamen kapsasın */
-}
+li,ul{list-style:none;padding:0;margin:0}
+.sec-title{position:relative;padding-bottom:40px}
+.sec-title .title{position:relative;color:#00b8ca;font-size:18px;font-weight:700;padding-right:50px;margin-bottom:15px;display:inline-block;text-transform:capitalize}
+.sec-title .title:before{position:absolute;content:'';right:0;bottom:7px;width:40px;height:1px;background-color:#bbb}
+.sec-title h2{position:relative;color:#252525;font-size:36px;font-weight:700;line-height:1.5em;display:block}
+.sec-title.light h2{color:#fff}.appointment-section{position:relative;padding:110px 0 80px}
+.appointment-section .form-column{position:relative;margin-bottom:40px}.default-form{position:relative}
+.default-form .form-group{position:relative;margin-bottom:20px}
+.default-form .form-group i{position:absolute;right:15px;top:15px;color:#00b8ca;font-size:18px}
+.default-form .form-group input[type=text],
+.default-form .form-group input[type=tel],
+.default-form .form-group input[type=email],
+.default-form .form-group select{position:relative;display:block;width:100%;line-height:28px;padding:10px 20px;color:#000;height:50px;font-size:13px;background:#fff;border:1px solid #d7d7d7;-webkit-transition:all .3s ease;-ms-transition:all .3s ease;-o-transition:all .3s ease;-moz-transition:all .3s ease;transition:all .3s ease}.default-form .form-group input[type=text]:focus,.default-form .form-group input[type=tel]:focus,.default-form .form-group input[type=email]:focus,.default-form .form-group textarea:focus{border-color:#00b8ca}.default-form .form-group textarea{position:relative;display:block;width:100%;line-height:22px;padding:15px 20px;color:#797979;height:120px;background:#fff;resize:none;font-size:14px;border:1px solid #d7d7d7;-webkit-transition:all .3s ease;-ms-transition:all .3s ease;-o-transition:all .3s ease;-moz-transition:all .3s ease;transition:all .3s ease}
+.default-form .form-group .appointment-btn{position:relative;text-align:center;font-size:15px;font-weight:700;padding:11px 30px;margin-top:10px;display:inline-block;background-color:#00b8ca;border:1px solid #00b8ca;text-transform:uppercase;color:#fff}.default-form .form-group .btn-detail{position:relative;color:#777;font-size:15px;margin-left:35px;display:inline-block}.appointment-section .schedule-column{position:relative}.appointment-section .schedule-column .inner-outer{position:relative;padding-left:20px;padding-bottom:20px}.appointment-section .schedule-column .inner-outer:before{position:absolute;content:'';left:0;bottom:0;width:347px;height:268px;background:url(https://i.ibb.co/gjZ1NFM/pattern-Appoinment.png) no-repeat}.appointment-section .schedule-column .inner-column{position:relative;padding:25px 30px;border:2px solid #00b8ca;background-color:#fff}
+.appointment-section .schedule-column h2{position:relative;color:#252525;font-size:24px;font-weight:600;line-height:1.4em;margin-bottom:15px}
+.appointment-section .schedule-column .time-list{position:relative}
+.appointment-section .schedule-column .time-list li{position:relative;color:#777;font-size:15px;margin-bottom:12px}
+.appointment-section .schedule-column .time-list li:last-child{margin-bottom:0}.appointment-section .schedule-column .time-list li strong{color:#222;font-weight:700}
+.appointment-section .schedule-column .time-list .closed{position:relative;color:#00b8ca}
 
-.calendar-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffffff;  /* Takvim için beyaz arka plan */
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    width: 90%;
-    max-width: 1000px; /* Ekran boyutuna göre genişlik sınırlaması */
-}
 
-.calendar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-bottom: 20px;  /* Takvim başlığı ile takvim arasındaki boşluk */
-}
-
-.btn-month {
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-    border-radius: 8px;
-    transition: background-color 0.3s ease-in-out;
-    font-size: 18px;
-}
-
-.btn-month:hover {
-    background-color: #0056b3;
-}
-
-.month-year {
-    font-size: 22px;
-    font-weight: bold;
-    color: #333;
-    text-align: center;
-}
-
-.calendar-content {
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    align-items: flex-start;
-}
-
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-    width: 70%;  /* Takvimin genişliği */
-    margin-bottom: 20px;
-    height: auto;
-}
-
-.calendar-day {
-    text-align: center;
-    padding: 20px;
-    cursor: pointer;
-    border-radius: 8px;
-    background-color: #f1f1f1;  /* Gün kutularını daha açık griye çeviriyoruz */
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    font-size: 20px;
-}
-
-.calendar-day:hover {
-    background-color: #e1e1e1;
-    transform: scale(1.05);
-}
-
-.today {
-    background-color: #ffeb3b;  /* Bugün için sarı arka plan */
-    color: #000;
-}
-
-.selected {
-    background-color: #007BFF;
-    color: white;
-}
-
-.time-slots-container {
-    width: 28%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #ffffff;  /* Saatler için beyaz arka plan */
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin-left: 20px;
-}
-
-.selected-day-info {
-    width: 100%;
-    color: #333;
-    padding: 20px;
-    background-color: #0288d1;  /* Seçilen gün için mavi arka plan */
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.selected-day-info p {
-    margin-bottom: 20px;
-    font-size: 18px;
-    text-align: center;
-}
-
-.time-slots {
-    width: 100%;
-}
-
-.time-slot {
-    padding: 12px;
-    background-color: #f1f1f1;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-    margin-bottom: 10px;
-    font-size: 16px;
-}
-
-.time-slot:hover {
-    background-color: #007BFF;  /* Saat dilimleri için mavi hover efekti */
-    transform: scale(1.05);
-}
-
-.time-slot.selected {
-    background-color: #28a745; /* Seçilen saatin arka planını yeşil yapıyoruz */
-    color: white;
-}
