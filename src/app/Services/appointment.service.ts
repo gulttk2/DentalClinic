@@ -9,21 +9,27 @@ export interface AppointmentService{
   ID:number,
   AppointmentID:number,
   ServiceID:number,
-  Appointments: Appointment,
+  Appointments: Appointments,
   PatientID:number,
   Patients:Patients,
   Services:Services
+  Duration: Date
+}
+export interface Appointments {
+  ID: number;
+  AppointmentDate: string;        // ISO string: "2025-04-14T12:00:00.000Z"
+  IsAvailable: boolean;
+  DoctorID: number;
+  Doctors: Doctor;
+  PatientID: number;
+  Patients: Patients;
+  StartTime: string | null;       // TimeSpan string: "08:30:00"
+  EndTime: string | null;         // TimeSpan string: "09:00:00"
+  CreatedDate: string;            // ISO string
+  Status: string;
+}
 
-}
-export interface Appointment{
-ID:number,
-AppointmentDate:string,
-IsAvailable:boolean,
-DoctorID:number,
-Doctors:Doctor
-PatientID:number,
-Patients:Patients
-}
+
 
 export interface Patients{
 ID:number,
@@ -65,11 +71,11 @@ export class AppointmentService {
     return this.http.get<string[]>(`${this.apiUrl}/AppointmentService/GetDoctorAvailability?doctorId=${doctorId}`);
   }
 
-  addAppointment(appointment: Appointment): Observable<Appointment> {
-    return this.http.post<Appointment>(`${this.apiUrl}/Appointment/AddAppointments`, appointment);
+  addAppointments(request: Appointments): Observable<Appointments[]> {
+    return this.http.post<Appointments[]>(`${this.apiUrl}/Appointment/CheckOrCreateUserAndAddAppointment`, request);
   }
-  getAppointments(): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(`${this.apiUrl}/Appointment/GetAllAppointments`);
+  getAppointments(): Observable<Appointments[]> {
+    return this.http.get<Appointments[]>(`${this.apiUrl}/Appointment/GetAllAppointments`);
   }
   getDoctors(): Observable<Doctor[]> {
     return this.http.get<Doctor[]>(`${this.apiUrl}/Doctor/GetAllDoctor`);

@@ -20,3 +20,7 @@ li,ul{list-style:none;padding:0;margin:0}
 .appointment-section .schedule-column .time-list .closed{position:relative;color:#00b8ca}
 
 
+.btn-danger {
+    background-color: red !important;
+    color: white !important;
+  }

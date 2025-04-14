@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Doctor } from './doctor.service';
 
 
 export interface DoctorAvailability{
@@ -9,14 +10,7 @@ export interface DoctorAvailability{
   EndTime:string,
   DayOfWeek:string,
   Doctors: Doctor;
-}
-export interface Doctor {
-  ID: number;
-  FirstName: string;
-  LastName: string;
-  Specialization: string;
-  Phone: string;
-  Email: string;
+  TimeSlot:string
 }
 
 @Injectable({

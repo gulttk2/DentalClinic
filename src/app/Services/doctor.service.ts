@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 export interface Doctor{
-  ID: 0,
+  ID: number,
   FirstName:string,
   LastName:string,
   Specialization:string,

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { Appointment } from '../../Services/appointment.service';
+import { Appointments } from '../../Services/appointment.service';
 import { AppointsService } from '../../Services/appoints.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class AppointsComponent implements OnInit{
 
-appoints:Appointment[]=[];
+appoints:Appointments[]=[];
 
 constructor(private appointService:AppointsService) {}
 ngOnInit(): void {
