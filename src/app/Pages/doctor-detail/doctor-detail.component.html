@@ -1,50 +1,50 @@
 <section class="appointment-section">
-    <div class="container">
-      <div class="sec-title">
-        <div class="title">Kolayca Randevunuzu oluşturun ve Sürecinizi Takip edin</div>
-        <h2>Randevu Bilgileri</h2>
-      </div>
-      <div class="row clearfix">
-  
-        <!-- Form Kolonu -->
-        <div class="form-column col-md-8 col-sm-12 col-xs-12">
-          <div class="inner-column">
-            <div class="default-form">
-              <form method="post">
-                <div class="row clearfix">
-                  <div class="column col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                      <input type="text" name="username"  [(ngModel)]="patient.FirstName" placeholder="Adınız" required>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" name="usersurname" [(ngModel)]="patient.LastName" placeholder="Soyadınız" required>
-                    </div>
-                    
-                    <!-- Kategori seçimi -->
-                    <div class="form-group">
-                      <select class="custom-select-box" [(ngModel)]="selectedCategoryId" name="category" (change)="onCategoryChange()">
-                        <option value="" disabled selected>Kategori Seçin</option>
-                        <option *ngFor="let category of categories" [value]="category.ID">{{ category.CategoryName }}</option>
-                      </select>
-                    </div>
+  <div class="container">
+    <div class="sec-title">
+      <div class="title">Kolayca Randevunuzu oluşturun ve Sürecinizi Takip edin</div>
+      <h2>Randevu Bilgileri</h2>
+    </div>
+    <div class="row clearfix">
+
+      <!-- Form Kolonu -->
+      <div class="form-column col-md-8 col-sm-12 col-xs-12">
+        <div class="inner-column">
+          <div class="default-form">
+            <form method="post">
+              <div class="row clearfix">
+                <div class="column col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <input type="text" name="username" [(ngModel)]="patient.FirstName" placeholder="Adınız" required>
                   </div>
-                  <div class="column col-md-6 col-sm-6 col-xs-12">
-                    <div class="form-group">
-                      <input type="email" name="email" [(ngModel)]="patient.Email" placeholder="E-posta" required>
-                    </div>
-                    <div class="form-group">
-                      <input type="text" name="phone" [(ngModel)]="patient.Phone" placeholder="Telefon" required>
-                    </div>
-                    <!-- Hizmet seçimi -->
-                    <div class="form-group" > 
-                        <select class="custom-select-box" [(ngModel)]="selectedServiceId" name="service">
-                          <option value="" disabled selected>Hizmet Seçin</option>
-                          <option *ngFor="let service of filteredServices" [value]="service.ID">{{ service.Name }}</option>
-                        </select>
-                      </div>
+                  <div class="form-group">
+                    <input type="text" name="usersurname" [(ngModel)]="patient.LastName" placeholder="Soyadınız" required>
                   </div>
-                  
-                  <div class="form-group" > 
+
+                  <!-- Kategori seçimi -->
+                  <div class="form-group">
+                    <select class="custom-select-box" [(ngModel)]="selectedCategoryId" name="category" (change)="onCategoryChange()">
+                      <option value="" disabled selected>Kategori Seçin</option>
+                      <option *ngFor="let category of categories" [value]="category.ID">{{ category.CategoryName }}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="column col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group">
+                    <input type="email" name="email" [(ngModel)]="patient.Email" placeholder="E-posta" required>
+                  </div>
+                  <div class="form-group">
+                    <input type="text" name="phone" [(ngModel)]="patient.Phone" placeholder="Telefon" required>
+                  </div>
+                  <!-- Hizmet seçimi -->
+                  <div class="form-group"> 
+                    <select class="custom-select-box" [(ngModel)]="selectedServiceId" name="service">
+                      <option value="" disabled selected>Hizmet Seçin</option>
+                      <option *ngFor="let service of filteredServices" [value]="service.ID">{{ service.Name }}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group"> 
                   <!-- Doktor Seçimi -->
                   <select [(ngModel)]="selectedDoctorId" name="doctor" (click)="onDoctorChange()" required>
                     <option value="" disabled selected>Doktor Seçin</option>
@@ -52,74 +52,66 @@
                       {{ doctor.FirstName }} {{ doctor.LastName }}
                     </option>
                   </select>
-                  </div>
-
-
-                 <!-- Saat seçimi yapılmadan sadece div'e tıklanarak tabloyu gösteriyoruz -->
-                  <div class="form-group" (click)="showTable = true">
-                    <span class="btn btn-primary">Saat Seçin</span>  <!-- Div ya da Buton -->
-                  </div>
-
-                  <!-- Tabloyu sadece showTable değişkeni true olduğunda göstereceğiz -->
-                  <table *ngIf="showTable" class="table table-bordered table-striped text-center align-middle">
-                    <thead class="table-primary">
-                      <tr>
-                        <th>Saat</th>
-                        <th *ngFor="let gun of gunler">{{ gun }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr *ngFor="let item of liste">
-                        <td><strong>{{ item.saat }}</strong></td>
-                        <td *ngFor="let gun of item.gunler">
-                          <ng-container *ngIf="!gun.deger || gun.deger === ''">
-                            <button class="btn btn-sm btn-success" (click)="randevuAl(item.saat, gun.ad)">
-                              Randevu Al
-                            </button>
-                          </ng-container>
-                          <ng-container *ngIf="gun.deger && gun.deger !== ''">
-                            <span class="text-danger fw-bold">Dolu</span>
-                          </ng-container>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-
-                                    
-
-
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
-                    <button class="theme-btn appointment-btn" (click)="createAppointment()" type="submit" name="submit-form">Randevu Al</button>
-                  </div>
                 </div>
 
-                
+                <!-- Saat seçimi yapılmadan sadece div'e tıklanarak tabloyu gösteriyoruz -->
+                <div class="form-group" (click)="showTable = true">
+                  <span class="btn btn-primary">Saat Seçin</span>  <!-- Div ya da Buton -->
+                </div>
 
+            <!-- Tabloyu sadece showTable değişkeni true olduğunda göstereceğiz -->
+            <table *ngIf="showTable" class="table table-bordered table-striped text-center align-middle">
+              <thead class="table-primary">
+                <tr>
+                  <th>Saat</th>
+                  <th *ngFor="let gun of gunler">{{ gun }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of liste">
+                  <td><strong>{{ item.saat }}</strong></td>
+                  <td *ngFor="let gun of item.gunler">
+                    <ng-container *ngIf="!gun.deger || gun.deger === ''">
+                      <button 
+                      class="btn btn-sm" 
+                      [ngClass]="{
+                        'btn-success': gun.deger === '', 
+                        'btn-danger': gun.deger === 'Dolu'
+                      }" 
+                      (click)="randevuAl(item.saat, gun.ad)" 
+                      [disabled]="gun.deger === 'Dolu'">
+                      {{ gun.deger === '' ? 'Randevu Al' : 'Dolu' }}
+                    </button>
+                    
+                    </ng-container>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
 
-
-              </form>
-            </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
+                  <button class="theme-btn appointment-btn" (click)="createAppointment()" type="submit" name="submit-form">Randevu Al</button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-  
-        <div class="schedule-column col-md-4 col-sm-12 col-xs-12">
-          <div class="inner-outer">
-            <div class="inner-column">
-              <h2>Çalışma Saatleri:</h2>
-              <ul class="time-list">
-                <li>Pazartesi - Cuma 09:00 - 17:00</li>
-                <li>Cumartesi 09:00 - 15:00</li>
-                <li><strong>Pazar Kapalı</strong></li>
-                <li class="closed">Tüm resmi tatiller kapalıdır.</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-  
       </div>
+
+      <div class="schedule-column col-md-4 col-sm-12 col-xs-12">
+        <div class="inner-outer">
+          <div class="inner-column">
+            <h2>Çalışma Saatleri:</h2>
+            <ul class="time-list">
+              <li>Pazartesi - Cuma 09:00 - 17:00</li>
+              <li>Cumartesi 09:00 - 15:00</li>
+              <li><strong>Pazar Kapalı</strong></li>
+              <li class="closed">Tüm resmi tatiller kapalıdır.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
     </div>
-
+  </div>
 </section>
-  
-
-

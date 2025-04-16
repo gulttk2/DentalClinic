@@ -80,4 +80,20 @@ export class AppointmentService {
   getDoctors(): Observable<Doctor[]> {
     return this.http.get<Doctor[]>(`${this.apiUrl}/Doctor/GetAllDoctor`);
   }
+
+
+  getDoctorBusyHours(doctorId: number, date: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/Appointment/GetDoctorBusyHours?doctorId=${doctorId}&date=${date}`);
+  }
+  
+
+
+
+
+
+
+
+
+
+
 }
