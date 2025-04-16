@@ -57,7 +57,9 @@ export class DoctorDetailComponent implements OnInit {
 
   busyHours: { startTime: string, endTime: string }[] = [];
 
-
+  onaylandiMi: boolean = false;
+  selectedDay: string = '';
+  
   constructor(private appointmentService: AppointmentService) {
     this.saatler.forEach(saat => {
       const gunlerListesi = this.gunler.map(gun => ({
@@ -100,7 +102,7 @@ export class DoctorDetailComponent implements OnInit {
         console.log('API Yanıtı: ', data); // API yanıtını kontrol ediyoruz
         this.availableDates = data; // Müsait saatleri availableDates dizisine atıyoruz
       }, error => {
-        console.error('Hata: ', error); // Eğer hata varsa, bunu konsola yazdırıyoruz
+        console.error('Hata: ', error); 
       });
       console.log('Seçilen Doktor ID:', this.selectedDoctorId);
 
@@ -114,19 +116,18 @@ export class DoctorDetailComponent implements OnInit {
   }
 
   randevuAl(saat: string, gun: string) {
-    const secilenTarih = this.getTarihFromGun(gun); // Örn: "2025-04-17"
-    this.selectedTime = saat.replace('.', ':');     // Örn: "14.30" → "14:30"
-    this.selectedDate = secilenTarih;
-  debugger
-    console.log("Seçilen saat:", this.selectedTime);
-    console.log("Seçilen tarih:", this.selectedDate, "Gün:", gun);
-  
-    if (this.selectedDoctorId) {
-      this.createAppointment();
+    const secilenTarih = this.getTarihFromGun(gun);
+    const onay = confirm(`Randevunuzu ${secilenTarih} ${saat} olarak onaylıyor musunuz?`);
+    
+    if (onay) {
+      this.selectedTime = saat.replace('.', ':');
+      this.selectedDate = secilenTarih;
+      this.onaylandiMi = true;
     } else {
-      alert("Lütfen önce bir doktor seçin!");
+      this.onaylandiMi = false;
     }
   }
+  
   
   createAppointment() {
     const selectedPatient = this.patient; 
@@ -142,7 +143,6 @@ export class DoctorDetailComponent implements OnInit {
       return;
     }
   
-    // Tarih ve saat string'ini ISO formatına çevirelim
     const dateString = `${this.selectedDate}T${this.selectedTime}:00`;
     console.log(dateString);
     const appointmentDate = new Date(dateString);
@@ -174,9 +174,13 @@ export class DoctorDetailComponent implements OnInit {
     };
     console.log(appointments);
     this.appointmentService.addAppointments(appointments).subscribe({
-      next: () => alert('Randevu başarıyla oluşturuldu!'),
-      error: () => alert('Randevu oluşturulurken bir hata oluştu.')
+      next: () => {
+        alert('Randevu başarıyla oluşturuldu!');
+        this.onaylandiMi = false; 
+      },
+      error: () => alert('Bu saatte başka bir randevu var... Başka bir saat için tekrar deneyiniz')
     });
+    
   }
   
   
@@ -192,6 +196,11 @@ export class DoctorDetailComponent implements OnInit {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
   }
   
+  isAvailable(saat: string, gun: string): boolean {
+    const tarih = this.getTarihFromGun(gun); // Örn: 2025-04-17
+    const dateTimeString = `${tarih}T${saat}:00`;
+    return this.availableDates.includes(dateTimeString);
+  }
   
   
   getAppointments(): void {
