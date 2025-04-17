@@ -43,7 +43,7 @@ export interface Services{
 ID:number,
 Name:string,
 CategoryID:number,
-Category:Category
+Duration:string
 }
 export interface Category{
   ID: number,

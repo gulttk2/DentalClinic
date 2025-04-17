@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AppointmentService, Category, Services, Patients, Appointments } from '../../Services/appointment.service';
 import { NgxTimepickerModule } from 'ngx-timepicker';
 import { Doctor } from '../../Services/doctor.service';
+import emailjs from 'emailjs-com';
 
 @Component({
   selector: 'app-doctor-detail',
@@ -135,18 +136,14 @@ export class DoctorDetailComponent implements OnInit {
       doctor => Number(doctor.ID) === Number(this.selectedDoctorId)
     );    
   
-    console.log("Seçilen doktorun ID'si", this.selectedDoctorId);
-    console.log("Bulunan doktor:", selectedDoctor);
-  
     if (!selectedDoctor) {
       alert('Doktor bilgileri bulunamadı!');
       return;
     }
   
     const dateString = `${this.selectedDate}T${this.selectedTime}:00`;
-    console.log(dateString);
     const appointmentDate = new Date(dateString);
-    console.log(appointmentDate)
+  
     if (isNaN(appointmentDate.getTime())) {
       console.error("Geçersiz tarih formatı:", dateString);
       alert('Geçersiz tarih veya saat!');
@@ -154,14 +151,25 @@ export class DoctorDetailComponent implements OnInit {
     }
   
     const startTime = new Date(appointmentDate);
-    const endTime = new Date(startTime.getTime() + 30 * 60 * 1000); // 30 dk sonrası
+  
+    const selectedService = this.services.find(
+      s => s.ID === +this.selectedServiceId
+    );
+  
+    if (!selectedService) {
+      alert('Hizmet bilgisi bulunamadı!');
+      return;
+    }
+  
+    const durationInMinutes = this.parseDuration(selectedService.Duration); // 👈 dönüşüm yapıldı
+    const endTime = new Date(startTime.getTime() + durationInMinutes * 60 * 1000);
   
     const formatToTimeString = (date: Date): string =>
       date.toTimeString().split(' ')[0]; // HH:mm:ss
-     console.log(formatToTimeString);
+  
     const appointments: Appointments = {
       ID: 0,
-      AppointmentDate: this.formatDateTimeLocal(appointmentDate),   // DateTime
+      AppointmentDate: this.formatDateTimeLocal(appointmentDate),
       IsAvailable: true,
       DoctorID: this.selectedDoctorId,
       PatientID: selectedPatient.ID,
@@ -169,20 +177,39 @@ export class DoctorDetailComponent implements OnInit {
       Patients: selectedPatient,
       StartTime: formatToTimeString(startTime), 
       EndTime: formatToTimeString(endTime),
-      CreatedDate: new Date().toISOString(),                      
+      CreatedDate: new Date().toISOString(),
       Status: 'Active'
     };
-    console.log(appointments);
+  
     this.appointmentService.addAppointments(appointments).subscribe({
       next: () => {
         alert('Randevu başarıyla oluşturuldu!');
+        this.updateAppointmentTable(); 
+
+        // this.sendEmail();
         this.onaylandiMi = false; 
       },
       error: () => alert('Bu saatte başka bir randevu var... Başka bir saat için tekrar deneyiniz')
     });
-    
   }
   
+
+  // sendEmail(): void {
+  //   const templateParams = {
+  //     title: "Dental CLinic",
+  //     name: this.patient.FirstName + ' ' + this.patient.LastName,
+  //     time: `${this.selectedDate} ${this.selectedTime}`,
+  //     message: `Randevunuz Dr. ${this.doctors.find(d => d.ID === this.selectedDoctorId)?.FirstName} ile oluşturuldu `,
+  //     email: this.patient.Email
+  //   };
+    
+  //   emailjs.send('service_y2xpc4c', 'template_ttsc15j', templateParams, 'lEX8t3arRmIs4mSiT')
+  //     .then(() => {
+  //       console.log('E-posta başarıyla gönderildi!');
+  //     }, (error) => {
+  //       console.error('E-posta gönderme hatası:', error);
+  //     });
+  // }
   
   
   formatDateTimeLocal(date: Date): string {
@@ -202,29 +229,36 @@ export class DoctorDetailComponent implements OnInit {
     return this.availableDates.includes(dateTimeString);
   }
   
-  
   getAppointments(): void {
     this.appointmentService.getAppointments().subscribe(data => {
       this.appointments = data;
+  
+      // 👇 busyHours dizisini güncelle
+      this.busyHours = data.map(appt => ({
+        startTime: `${appt.AppointmentDate.split('T')[0]}T${appt.StartTime}`,
+        endTime: `${appt.AppointmentDate.split('T')[0]}T${appt.EndTime}`
+      }));
+  
+      this.updateAppointmentTable(); // tabloyu güncelle
     });
   }
-
-
+  
   updateAppointmentTable() {
     for (let row of this.liste) {
       for (let gun of row.gunler) {
-        const appointmentDate = new Date(gun.ad); // gun.ad = tarih
-        
-        const saat = row.saat; // saat = örneğin "10:00"
-        const selectedDateTime = new Date(`${appointmentDate.toDateString()} ${saat}`);
+        const tarih = this.getTarihFromGun(gun.ad); // "2025-04-17" gibi
+        const saat = row.saat; // "10:00" gibi
   
-        gun.deger = ''; // Önce boş
+        const selectedDateTime = new Date(`${tarih}T${saat}:00`);
+        gun.deger = ''; // Başlangıçta boş
+  
         for (let appt of this.busyHours) {
           const start = new Date(appt.startTime);
           const end = new Date(appt.endTime);
   
+          // Eğer bu hücredeki saat bu aralığın içindeyse “Dolu” olarak işaretle
           if (selectedDateTime >= start && selectedDateTime < end) {
-            gun.deger = 'Dolu'; // Eğer çakışıyorsa işaretle
+            gun.deger = 'Dolu';
             break;
           }
         }
@@ -232,7 +266,6 @@ export class DoctorDetailComponent implements OnInit {
     }
   }
   
-
   getTarihFromGun(gun: string): string {
     const bugun = new Date();
     const gunlerMap: { [key: string]: number } = {
@@ -251,7 +284,13 @@ export class DoctorDetailComponent implements OnInit {
   }
   
 
-
+  parseDuration(durationStr: string): number {
+    const parts = durationStr.split(':').map(part => parseInt(part, 10));
+    const hours = parts[0] || 0;
+    const minutes = parts[1] || 0;
+    return hours * 60 + minutes;
+  }
+  
 
 
 }

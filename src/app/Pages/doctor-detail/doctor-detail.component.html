@@ -71,25 +71,27 @@
                 <tr *ngFor="let item of liste">
                   <td><strong>{{ item.saat }}</strong></td>
                   <td *ngFor="let gun of item.gunler">
-                    <ng-container *ngIf="!isAvailable(item.saat, gun.ad)">
+                    <!-- Show button only when the slot is available (gun.deger is empty) -->
+                    <ng-container *ngIf="gun.deger === ''">
                       <button 
                         class="btn btn-sm" 
                         [ngClass]="{
-                          'btn-success': gun.deger === '' && !(selectedTime === item.saat && selectedDay === gun.ad),
-                          'btn-danger': gun.deger === 'Dolu',
-                          'btn-secondary': selectedTime === item.saat && selectedDay === gun.ad,
-                          
+                          'btn-success': !(selectedTime === item.saat && selectedDay === gun.ad)
                         }" 
                         (click)="randevuAl(item.saat, gun.ad)" 
-                        [disabled]="gun.deger === 'Dolu' || (selectedTime === item.saat && selectedDay === gun.ad)">
-                        {{ gun.deger === '' ? (selectedTime === item.saat && selectedDay === gun.ad ? 'Seçildi' : 'Randevu Al') : 'Dolu' }}
+                        [disabled]="(selectedTime === item.saat && selectedDay === gun.ad)">
+                        {{ selectedTime === item.saat && selectedDay === gun.ad ? 'Seçildi' : 'Randevu Al' }}
                       </button>
+                    </ng-container>
+                    <!-- Show "Dolu" when the slot is not available -->
+                    <ng-container *ngIf="gun.deger === 'Dolu'">
+                      <button class="btn btn-sm" disabled>Dolu</button>
                     </ng-container>
                   </td>
                 </tr>
               </tbody>
-              
             </table>
+            
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 form-group">
                   <button class="theme-btn appointment-btn" (click)="createAppointment()" type="submit" name="submit-form">Randevu Al</button>
                 </div>
