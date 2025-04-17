@@ -5,6 +5,7 @@ import { AppointmentService, Category, Services, Patients, Appointments } from '
 import { NgxTimepickerModule } from 'ngx-timepicker';
 import { Doctor } from '../../Services/doctor.service';
 import emailjs from 'emailjs-com';
+import { Email, MailService } from '../../Services/mail.service';
 
 @Component({
   selector: 'app-doctor-detail',
@@ -59,9 +60,20 @@ export class DoctorDetailComponent implements OnInit {
   busyHours: { startTime: string, endTime: string }[] = [];
 
   onaylandiMi: boolean = false;
+
   selectedDay: string = '';
-  
-  constructor(private appointmentService: AppointmentService) {
+
+email: Email = {
+  to : '',
+  subject: '',
+  text: '',
+  resultMessage: '', 
+
+
+}
+
+
+  constructor(private appointmentService: AppointmentService,private emailService: MailService) {
     this.saatler.forEach(saat => {
       const gunlerListesi = this.gunler.map(gun => ({
         ad: gun,
@@ -185,8 +197,11 @@ export class DoctorDetailComponent implements OnInit {
       next: () => {
         alert('Randevu başarıyla oluşturuldu!');
         this.updateAppointmentTable(); 
+        console.log('Email:', this.patient.Email);
+        console.log('Subject:', this.email.subject);
+        console.log('Text:', this.email.text);
 
-        // this.sendEmail();
+         this.sendMail();
         this.onaylandiMi = false; 
       },
       error: () => alert('Bu saatte başka bir randevu var... Başka bir saat için tekrar deneyiniz')
@@ -194,23 +209,24 @@ export class DoctorDetailComponent implements OnInit {
   }
   
 
-  // sendEmail(): void {
-  //   const templateParams = {
-  //     title: "Dental CLinic",
-  //     name: this.patient.FirstName + ' ' + this.patient.LastName,
-  //     time: `${this.selectedDate} ${this.selectedTime}`,
-  //     message: `Randevunuz Dr. ${this.doctors.find(d => d.ID === this.selectedDoctorId)?.FirstName} ile oluşturuldu `,
-  //     email: this.patient.Email
-  //   };
+  sendMail() {
+    this.email.to = this.patient.Email;
+    this.email.subject = 'Randevu Bilgilendirmesi';
+    this.email.text = `Sayın ${this.patient.FirstName}, randevunuz ${this.selectedDate} - ${this.selectedTime} saatinde oluşturulmuştur.`;
     
-  //   emailjs.send('service_y2xpc4c', 'template_ttsc15j', templateParams, 'lEX8t3arRmIs4mSiT')
-  //     .then(() => {
-  //       console.log('E-posta başarıyla gönderildi!');
-  //     }, (error) => {
-  //       console.error('E-posta gönderme hatası:', error);
-  //     });
-  // }
+    this.emailService.sendEmailObject(this.email).subscribe({
+      next: () => {
+        this.email.resultMessage = 'E-posta başarıyla gönderildi.';
+      },
+      error: (err) => {
+        this.email.resultMessage = 'E-posta gönderilirken hata oluştu: ' + err.message;
+        console.error(err);
+      }
+    });
+    
+  }
   
+   
   
   formatDateTimeLocal(date: Date): string {
     const pad = (n: number) => n.toString().padStart(2, '0');
